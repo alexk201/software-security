@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Vulnerable JavaScript Example</title>
+</head>
+<body>
+  <h1>User Comments</h1>
+  <form id="commentForm">
+    <input type="text" id="username" placeholder="Enter your name" />
+    <br/>
+    <textarea id="comment" placeholder="Enter your comment"></textarea>
+    <br/>
+    <button type="submit">Submit Comment</button>
+  </form>
+  <div id="commentsSection"></div>
+
+  <h2>Simple Calculator</h2>
+  <input type="text" id="calcInput" placeholder="Enter calculation" />
+  <button onclick="calculate()">Calculate</button>
+  <p id="calcResult"></p>
+
+  <script>
+    // Vulnerable to Cross-Site Scripting (XSS) because it directly injects unsanitized user input.
+    document.getElementById('commentForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var username = document.getElementById('username').value;
+      var comment = document.getElementById('comment').value;
+      // Using innerHTML without proper sanitization can execute malicious scripts.
+      document.getElementById('commentsSection').innerHTML += 
+         "<p><strong>" + username + ":</strong> " + comment + "</p>";
+    });
+
+    // Vulnerable to unsafe function usage: using eval on untrusted input.
+    function calculate() {
+      var userInput = document.getElementById('calcInput').value;
+      // Using eval can lead to arbitrary code execution.
+      var result = eval(userInput);
+      document.getElementById('calcResult').innerText = "Result: " + result;
+    }
+  </script>
+</body>
+</html>
